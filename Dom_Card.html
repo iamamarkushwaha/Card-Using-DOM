@@ -9,7 +9,7 @@
   <div id="card-container"></div>
 
   <script>
-    // Fetch just one user (user with ID 1)
+    
     fetch('https://jsonplaceholder.typicode.com/users/1')
       .then(response => response.json()).then(user => {
         const container = document.getElementById('card-container');
@@ -29,7 +29,7 @@
         card.style.background = 'linear-gradient(to bottom,   #f9a8d4 25%, #c4b5fd 50%)'
         card.style.color = '#5c4033'
 
-        // Define fields to show
+        
         const fields = [
           { label: 'User ID', value: user.id, tag: 'p', bold: true},
           { label: 'Username', value: user.username, tag: 'p'},
