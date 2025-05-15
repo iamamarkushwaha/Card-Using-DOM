@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Card Using DOM</title>
+</head>
+<body>
+  <div id="card-container"></div>
+
+  <script>
+    async function createCards() {
+      const res = await fetch('https://jsonplaceholder.typicode.com/users');
+      const users = await res.json();
+
+      const container = document.getElementById('card-container');
+      container.style.display = 'flex';
+      container.style.flexWrap = 'wrap';
+      container.style.alignItems = 'center';
+      container.style.marginTop = '50px';
+      container.style.gap = '50px';
+      container.style.padding = '20px';
+      container.style.justifyContent = 'center';
+     //container.style.background = 'linear-gradient(135deg, #6441a5 0%, #2a0845 100%)';
+      
+
+      for (let i = 0; i < users.length; i++) {
+        const user = users[i];
+
+        const cardWrapper = document.createElement('div');
+        cardWrapper.style.width = '220px';
+        cardWrapper.style.height = '270px';
+        cardWrapper.style.perspective = '1000px';
+
+        const card = document.createElement('div');
+        card.style.width = '110%';
+        card.style.height = '100%';
+        card.style.position = 'relative';
+        card.style.transformStyle = 'preserve-3d';
+        card.style.transition = 'transform 0.6s';
+        cardWrapper.appendChild(card);
+
+        // Flip on hover
+        cardWrapper.onmouseenter = () => card.style.transform = 'rotateY(180deg)';
+        cardWrapper.onmouseleave = () => card.style.transform = 'rotateY(0deg)';
+
+        // Front side
+        const front = document.createElement('div');
+        front.style.position = 'absolute';
+        front.style.width = '100%';
+        front.style.height = '100%';
+        front.style.backfaceVisibility = 'hidden';
+        front.style.background = '#ffffff';
+        front.style.display = 'flex';
+        front.style.flexDirection = 'column';
+        front.style.alignItems = 'center';
+        front.style.justifyContent = 'center';
+        front.style.border = '1px solid #ccc';
+        front.style.borderRadius = '10px';
+        front.style.boxShadow = '0 4px 8px rgba(0,0,0,0.2)';
+        front.style.padding = '10px';
+        front.style.boxSizing = 'border-box';
+        front.style.background = 'linear-gradient(135deg, #6441a5 0%, #2a0845 100%)';
+        front.style.color = 'white';
+        front.style.fontSize = '5px';
+        front.style.textAlign = 'center';
+        front.style.wordSpacing = '2px';
+        front.style.fontFamily = 'Quicksand';
+        
+
+        // Fields to show on front
+        const fieldsToShow = {
+          'ID': user.id,
+          'Name': user.name,
+          'Username': user.username,
+          'Email': user.email,
+          'Phone': user.phone,
+          'Website': user.website
+        };
+
+        for (const key in fieldsToShow) {
+          const p = document.createElement('p');
+          p.textContent = `${key}: ${fieldsToShow[key]}`;
+          p.style.margin = '3px 0';
+          p.style.fontSize = '14px';
+          p.style.textAlign = 'center';
+          front.appendChild(p);
+
+          if (key === 'Username') {
+          const spacer = document.createElement('div');
+          spacer.style.height = '50px';
+          front.appendChild(spacer);
+        }
+        
+
+        }
+
+        card.appendChild(front);
+
+        // Back side with full address
+        const back = document.createElement('div');
+        back.style.position = 'absolute';
+        back.style.width = '100%';
+        back.style.height = '100%';
+        back.style.backfaceVisibility = 'hidden';
+        back.style.transform = 'rotateY(180deg)';
+        back.style.background = '#f0faff';
+        back.style.display = 'flex';
+        back.style.flexDirection = 'column';
+        back.style.alignItems = 'center';
+        back.style.justifyContent = 'center';
+        back.style.border = '1px solid #ccc';
+        back.style.borderRadius = '10px';
+        back.style.boxShadow = '0 4px 8px rgba(0,0,0,0.2)';
+        back.style.padding = '15px';
+        back.style.boxSizing = 'border-box';
+        back.style.color = '#333';
+        back.style.fontSize = '10px';
+        back.style.textAlign = 'center';
+        back.style.wordSpacing = '2px';
+        back.style.fontFamily = 'Arial, sans-serif';
+
+        const address = user.address;
+        const fullAddress = `${address.suite}, ${address.street}, ${address.city}, ${address.zipcode}`;
+        const addressEl = document.createElement('p');
+        addressEl.textContent = `Address:\n${fullAddress}`;
+        addressEl.style.textAlign = 'center';
+        addressEl.style.fontSize = '14px';
+        addressEl.style.whiteSpace = 'pre-wrap';
+
+        back.appendChild(addressEl);
+        card.appendChild(back);
+
+        container.appendChild(cardWrapper);
+      }
+    }
+
+    createCards();
+  </script>
+</body>
+</html>
